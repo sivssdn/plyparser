@@ -3,6 +3,10 @@ import ply.lex as lex
 tokens = (
    'NUMBER',
    'INT',
+   'BEGIN',
+   'END',
+   'COMMA',
+   'EQUALS',
    'ID',
    'EOL',
    'PLUS',
@@ -13,6 +17,10 @@ tokens = (
    'RPAREN',
 )
 
+t_EQUALS = r'='
+t_COMMA = r','
+t_BEGIN = r'begin:'
+t_END = r'end'
 t_INT = r'int'
 t_PLUS    = r'\+'
 t_MINUS   = r'-'
