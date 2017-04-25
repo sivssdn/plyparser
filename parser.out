@@ -2,18 +2,20 @@ Created by PLY version 3.10 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    MINUS
     LPAREN
-    RPAREN
+    END
+    BEGIN
     TIMES
     DIVIDE
-    MINUS
+    RPAREN
 
 Grammar
 
-Rule 0     S' -> program
-Rule 1     program -> BEGIN stmt END
-Rule 2     stmt -> INT expr EOL
-Rule 3     stmt -> expression EOL
+Rule 0     S' -> stmt
+Rule 1     stmt -> INT expr EOL
+Rule 2     stmt -> expression EOL
+Rule 3     stmt -> stmt stmt
 Rule 4     expr -> ID
 Rule 5     expr -> ID COMMA expr
 Rule 6     expr -> ID EQUALS NUMBER COMMA expr
@@ -26,14 +28,14 @@ Rule 12    term -> ID PLUS term
 
 Terminals, with rules where they appear
 
-BEGIN                : 1
+BEGIN                : 
 COMMA                : 5 6
 DIVIDE               : 
-END                  : 1
-EOL                  : 2 3
+END                  : 
+EOL                  : 1 2
 EQUALS               : 6 7 8
 ID                   : 4 5 6 7 8 10 12
-INT                  : 2
+INT                  : 1
 LPAREN               : 
 MINUS                : 
 NUMBER               : 6 7 9 11
@@ -44,83 +46,76 @@ error                :
 
 Nonterminals, with rules where they appear
 
-expr                 : 2 5 6
-expression           : 3
-program              : 0
-stmt                 : 1
+expr                 : 1 5 6
+expression           : 2
+stmt                 : 3 3 0
 term                 : 8 11 12
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . program
-    (1) program -> . BEGIN stmt END
+    (0) S' -> . stmt
+    (1) stmt -> . INT expr EOL
+    (2) stmt -> . expression EOL
+    (3) stmt -> . stmt stmt
+    (8) expression -> . ID EQUALS term
 
-    BEGIN           shift and go to state 1
+    INT             shift and go to state 1
+    ID              shift and go to state 3
 
-    program                        shift and go to state 2
+    expression                     shift and go to state 2
+    stmt                           shift and go to state 4
 
 state 1
 
-    (1) program -> BEGIN . stmt END
-    (2) stmt -> . INT expr EOL
-    (3) stmt -> . expression EOL
-    (8) expression -> . ID EQUALS term
-
-    INT             shift and go to state 3
-    ID              shift and go to state 6
-
-    stmt                           shift and go to state 5
-    expression                     shift and go to state 4
-
-state 2
-
-    (0) S' -> program .
-
-
-
-state 3
-
-    (2) stmt -> INT . expr EOL
+    (1) stmt -> INT . expr EOL
     (4) expr -> . ID
     (5) expr -> . ID COMMA expr
     (6) expr -> . ID EQUALS NUMBER COMMA expr
     (7) expr -> . ID EQUALS NUMBER
 
-    ID              shift and go to state 8
+    ID              shift and go to state 6
 
-    expr                           shift and go to state 7
+    expr                           shift and go to state 5
 
-state 4
+state 2
 
-    (3) stmt -> expression . EOL
+    (2) stmt -> expression . EOL
 
-    EOL             shift and go to state 9
-
-
-state 5
-
-    (1) program -> BEGIN stmt . END
-
-    END             shift and go to state 10
+    EOL             shift and go to state 7
 
 
-state 6
+state 3
 
     (8) expression -> ID . EQUALS term
 
-    EQUALS          shift and go to state 11
+    EQUALS          shift and go to state 8
 
 
-state 7
+state 4
 
-    (2) stmt -> INT expr . EOL
+    (0) S' -> stmt .
+    (3) stmt -> stmt . stmt
+    (1) stmt -> . INT expr EOL
+    (2) stmt -> . expression EOL
+    (3) stmt -> . stmt stmt
+    (8) expression -> . ID EQUALS term
 
-    EOL             shift and go to state 12
+    INT             shift and go to state 1
+    ID              shift and go to state 3
+
+    expression                     shift and go to state 2
+    stmt                           shift and go to state 9
+
+state 5
+
+    (1) stmt -> INT expr . EOL
+
+    EOL             shift and go to state 10
 
 
-state 8
+state 6
 
     (4) expr -> ID .
     (5) expr -> ID . COMMA expr
@@ -128,25 +123,20 @@ state 8
     (7) expr -> ID . EQUALS NUMBER
 
     EOL             reduce using rule 4 (expr -> ID .)
-    COMMA           shift and go to state 14
-    EQUALS          shift and go to state 13
+    COMMA           shift and go to state 11
+    EQUALS          shift and go to state 12
 
 
-state 9
+state 7
 
-    (3) stmt -> expression EOL .
+    (2) stmt -> expression EOL .
 
-    END             reduce using rule 3 (stmt -> expression EOL .)
-
-
-state 10
-
-    (1) program -> BEGIN stmt END .
-
-    $end            reduce using rule 1 (program -> BEGIN stmt END .)
+    INT             reduce using rule 2 (stmt -> expression EOL .)
+    ID              reduce using rule 2 (stmt -> expression EOL .)
+    $end            reduce using rule 2 (stmt -> expression EOL .)
 
 
-state 11
+state 8
 
     (8) expression -> ID EQUALS . term
     (9) term -> . NUMBER
@@ -154,27 +144,42 @@ state 11
     (11) term -> . NUMBER PLUS term
     (12) term -> . ID PLUS term
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 16
+    NUMBER          shift and go to state 13
+    ID              shift and go to state 15
 
-    term                           shift and go to state 17
+    term                           shift and go to state 14
 
-state 12
+state 9
 
-    (2) stmt -> INT expr EOL .
+    (3) stmt -> stmt stmt .
+    (3) stmt -> stmt . stmt
+    (1) stmt -> . INT expr EOL
+    (2) stmt -> . expression EOL
+    (3) stmt -> . stmt stmt
+    (8) expression -> . ID EQUALS term
 
-    END             reduce using rule 2 (stmt -> INT expr EOL .)
+  ! shift/reduce conflict for INT resolved as shift
+  ! shift/reduce conflict for ID resolved as shift
+    $end            reduce using rule 3 (stmt -> stmt stmt .)
+    INT             shift and go to state 1
+    ID              shift and go to state 3
+
+  ! INT             [ reduce using rule 3 (stmt -> stmt stmt .) ]
+  ! ID              [ reduce using rule 3 (stmt -> stmt stmt .) ]
+
+    expression                     shift and go to state 2
+    stmt                           shift and go to state 9
+
+state 10
+
+    (1) stmt -> INT expr EOL .
+
+    INT             reduce using rule 1 (stmt -> INT expr EOL .)
+    ID              reduce using rule 1 (stmt -> INT expr EOL .)
+    $end            reduce using rule 1 (stmt -> INT expr EOL .)
 
 
-state 13
-
-    (6) expr -> ID EQUALS . NUMBER COMMA expr
-    (7) expr -> ID EQUALS . NUMBER
-
-    NUMBER          shift and go to state 18
-
-
-state 14
+state 11
 
     (5) expr -> ID COMMA . expr
     (4) expr -> . ID
@@ -182,52 +187,60 @@ state 14
     (6) expr -> . ID EQUALS NUMBER COMMA expr
     (7) expr -> . ID EQUALS NUMBER
 
-    ID              shift and go to state 8
+    ID              shift and go to state 6
 
-    expr                           shift and go to state 19
+    expr                           shift and go to state 16
 
-state 15
+state 12
+
+    (6) expr -> ID EQUALS . NUMBER COMMA expr
+    (7) expr -> ID EQUALS . NUMBER
+
+    NUMBER          shift and go to state 17
+
+
+state 13
 
     (9) term -> NUMBER .
     (11) term -> NUMBER . PLUS term
 
     EOL             reduce using rule 9 (term -> NUMBER .)
-    PLUS            shift and go to state 20
+    PLUS            shift and go to state 18
 
 
-state 16
-
-    (10) term -> ID .
-    (12) term -> ID . PLUS term
-
-    EOL             reduce using rule 10 (term -> ID .)
-    PLUS            shift and go to state 21
-
-
-state 17
+state 14
 
     (8) expression -> ID EQUALS term .
 
     EOL             reduce using rule 8 (expression -> ID EQUALS term .)
 
 
-state 18
+state 15
 
-    (6) expr -> ID EQUALS NUMBER . COMMA expr
-    (7) expr -> ID EQUALS NUMBER .
+    (10) term -> ID .
+    (12) term -> ID . PLUS term
 
-    COMMA           shift and go to state 22
-    EOL             reduce using rule 7 (expr -> ID EQUALS NUMBER .)
+    EOL             reduce using rule 10 (term -> ID .)
+    PLUS            shift and go to state 19
 
 
-state 19
+state 16
 
     (5) expr -> ID COMMA expr .
 
     EOL             reduce using rule 5 (expr -> ID COMMA expr .)
 
 
-state 20
+state 17
+
+    (6) expr -> ID EQUALS NUMBER . COMMA expr
+    (7) expr -> ID EQUALS NUMBER .
+
+    COMMA           shift and go to state 20
+    EOL             reduce using rule 7 (expr -> ID EQUALS NUMBER .)
+
+
+state 18
 
     (11) term -> NUMBER PLUS . term
     (9) term -> . NUMBER
@@ -235,12 +248,12 @@ state 20
     (11) term -> . NUMBER PLUS term
     (12) term -> . ID PLUS term
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 16
+    NUMBER          shift and go to state 13
+    ID              shift and go to state 15
 
-    term                           shift and go to state 23
+    term                           shift and go to state 21
 
-state 21
+state 19
 
     (12) term -> ID PLUS . term
     (9) term -> . NUMBER
@@ -248,12 +261,12 @@ state 21
     (11) term -> . NUMBER PLUS term
     (12) term -> . ID PLUS term
 
-    NUMBER          shift and go to state 15
-    ID              shift and go to state 16
+    NUMBER          shift and go to state 13
+    ID              shift and go to state 15
 
-    term                           shift and go to state 24
+    term                           shift and go to state 22
 
-state 22
+state 20
 
     (6) expr -> ID EQUALS NUMBER COMMA . expr
     (4) expr -> . ID
@@ -261,27 +274,32 @@ state 22
     (6) expr -> . ID EQUALS NUMBER COMMA expr
     (7) expr -> . ID EQUALS NUMBER
 
-    ID              shift and go to state 8
+    ID              shift and go to state 6
 
-    expr                           shift and go to state 25
+    expr                           shift and go to state 23
 
-state 23
+state 21
 
     (11) term -> NUMBER PLUS term .
 
     EOL             reduce using rule 11 (term -> NUMBER PLUS term .)
 
 
-state 24
+state 22
 
     (12) term -> ID PLUS term .
 
     EOL             reduce using rule 12 (term -> ID PLUS term .)
 
 
-state 25
+state 23
 
     (6) expr -> ID EQUALS NUMBER COMMA expr .
 
     EOL             reduce using rule 6 (expr -> ID EQUALS NUMBER COMMA expr .)
 
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for INT in state 9 resolved as shift
+WARNING: shift/reduce conflict for ID in state 9 resolved as shift

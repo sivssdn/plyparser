@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'NUMBER INT BEGIN END COMMA EQUALS ID EOL PLUS MINUS TIMES DIVIDE LPAREN RPARENprogram : BEGIN stmt END stmt : INT expr EOL \n\t\t\t| expression EOL\n\t\t\texpr : ID\n\t\t\t| ID COMMA expr\n\t\t\t| ID EQUALS NUMBER COMMA expr\n\t\t\t| ID EQUALS NUMBER\n\texpression : ID EQUALS term\n\t\t\n\t\tterm : NUMBER\n\t\t\t| ID\n\t\t\t| NUMBER PLUS term\n\t\t\t| ID PLUS term\n\t\t\t\n\t'
+_lr_signature = 'NUMBER INT BEGIN END COMMA EQUALS ID EOL PLUS MINUS TIMES DIVIDE LPAREN RPARENstmt : INT expr EOL \n\t\t\t| expression EOL\n\t\t\t| stmt stmt\n\t\t\t\n\t\t\texpr : ID\n\t\t\t| ID COMMA expr\n\t\t\t| ID EQUALS NUMBER COMMA expr\n\t\t\t| ID EQUALS NUMBER\n\texpression : ID EQUALS term\n\t\t\n\t\tterm : NUMBER\n\t\t\t| ID\n\t\t\t| NUMBER PLUS term\n\t\t\t| ID PLUS term\n\t\t\t\n\t'
     
-_lr_action_items = {'BEGIN':([0,],[1,]),'END':([5,9,12,],[10,-3,-2,]),'EOL':([4,7,8,15,16,17,18,19,23,24,25,],[9,12,-4,-9,-10,-8,-7,-5,-11,-12,-6,]),'INT':([1,],[3,]),'EQUALS':([6,8,],[11,13,]),'NUMBER':([11,13,20,21,],[15,18,15,15,]),'$end':([2,10,],[0,-1,]),'COMMA':([8,18,],[14,22,]),'PLUS':([15,16,],[20,21,]),'ID':([1,3,11,14,20,21,22,],[6,8,16,8,16,16,8,]),}
+_lr_action_items = {'NUMBER':([8,12,18,19,],[13,17,13,13,]),'INT':([0,4,7,9,10,],[1,1,-2,1,-1,]),'COMMA':([6,17,],[11,20,]),'EOL':([2,5,6,13,14,15,16,17,21,22,23,],[7,10,-4,-9,-8,-10,-5,-7,-11,-12,-6,]),'$end':([4,7,9,10,],[0,-2,-3,-1,]),'PLUS':([13,15,],[18,19,]),'EQUALS':([3,6,],[8,12,]),'ID':([0,1,4,7,8,9,10,11,18,19,20,],[3,6,3,-2,15,3,-1,6,15,15,6,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'stmt':([1,],[5,]),'expression':([1,],[4,]),'term':([11,20,21,],[17,23,24,]),'program':([0,],[2,]),'expr':([3,14,22,],[7,19,25,]),}
+_lr_goto_items = {'expr':([1,11,20,],[5,16,23,]),'term':([8,18,19,],[14,21,22,]),'expression':([0,4,9,],[2,2,2,]),'stmt':([0,4,9,],[4,9,9,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -25,17 +25,17 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> program","S'",1,None,None,None),
-  ('program -> BEGIN stmt END','program',3,'p_program','parser.py',5),
-  ('stmt -> INT expr EOL','stmt',3,'p_stmt','parser.py',7),
-  ('stmt -> expression EOL','stmt',2,'p_stmt','parser.py',8),
-  ('expr -> ID','expr',1,'p_expr','parser.py',11),
-  ('expr -> ID COMMA expr','expr',3,'p_expr','parser.py',12),
-  ('expr -> ID EQUALS NUMBER COMMA expr','expr',5,'p_expr','parser.py',13),
-  ('expr -> ID EQUALS NUMBER','expr',3,'p_expr','parser.py',14),
-  ('expression -> ID EQUALS term','expression',3,'p_expression','parser.py',18),
-  ('term -> NUMBER','term',1,'p_term','parser.py',23),
-  ('term -> ID','term',1,'p_term','parser.py',24),
-  ('term -> NUMBER PLUS term','term',3,'p_term','parser.py',25),
-  ('term -> ID PLUS term','term',3,'p_term','parser.py',26),
+  ("S' -> stmt","S'",1,None,None,None),
+  ('stmt -> INT expr EOL','stmt',3,'p_stmt','parser.py',9),
+  ('stmt -> expression EOL','stmt',2,'p_stmt','parser.py',10),
+  ('stmt -> stmt stmt','stmt',2,'p_stmt','parser.py',11),
+  ('expr -> ID','expr',1,'p_expr','parser.py',15),
+  ('expr -> ID COMMA expr','expr',3,'p_expr','parser.py',16),
+  ('expr -> ID EQUALS NUMBER COMMA expr','expr',5,'p_expr','parser.py',17),
+  ('expr -> ID EQUALS NUMBER','expr',3,'p_expr','parser.py',18),
+  ('expression -> ID EQUALS term','expression',3,'p_expression','parser.py',22),
+  ('term -> NUMBER','term',1,'p_term','parser.py',27),
+  ('term -> ID','term',1,'p_term','parser.py',28),
+  ('term -> NUMBER PLUS term','term',3,'p_term','parser.py',29),
+  ('term -> ID PLUS term','term',3,'p_term','parser.py',30),
 ]

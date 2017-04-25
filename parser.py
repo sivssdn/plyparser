@@ -1,11 +1,15 @@
 import ply.yacc as yacc
 from lexer import tokens
 
-def p_program(p):
-	'''program : BEGIN stmt END '''
+# def p_program(p):
+	 # '''program : stmt 
+				# | BEGIN program END '''
+	 
 def p_stmt(p):
 	'''stmt : INT expr EOL 
 			| expression EOL
+			| stmt stmt
+			
 			'''
 def p_expr(p):
 	'''expr : ID
@@ -28,3 +32,4 @@ def p_term(p):
 	'''
 	
 yacc.yacc()
+yacc.parse("a=1111;bk=ca+4;")
