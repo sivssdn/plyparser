@@ -1,0 +1,11 @@
+z<5
+begin:
+	int a,b ;
+	int x,y,z,w=5;
+	int p=5;
+	y=7;
+	x=p+w;
+	r=55;
+	w=x*x;
+	z=w+2;
+end
