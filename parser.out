@@ -1,0 +1,287 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Unused terminals:
+
+    LPAREN
+    RPAREN
+    TIMES
+    DIVIDE
+    MINUS
+
+Grammar
+
+Rule 0     S' -> program
+Rule 1     program -> BEGIN stmt END
+Rule 2     stmt -> INT expr EOL
+Rule 3     stmt -> expression EOL
+Rule 4     expr -> ID
+Rule 5     expr -> ID COMMA expr
+Rule 6     expr -> ID EQUALS NUMBER COMMA expr
+Rule 7     expr -> ID EQUALS NUMBER
+Rule 8     expression -> ID EQUALS term
+Rule 9     term -> NUMBER
+Rule 10    term -> ID
+Rule 11    term -> NUMBER PLUS term
+Rule 12    term -> ID PLUS term
+
+Terminals, with rules where they appear
+
+BEGIN                : 1
+COMMA                : 5 6
+DIVIDE               : 
+END                  : 1
+EOL                  : 2 3
+EQUALS               : 6 7 8
+ID                   : 4 5 6 7 8 10 12
+INT                  : 2
+LPAREN               : 
+MINUS                : 
+NUMBER               : 6 7 9 11
+PLUS                 : 11 12
+RPAREN               : 
+TIMES                : 
+error                : 
+
+Nonterminals, with rules where they appear
+
+expr                 : 2 5 6
+expression           : 3
+program              : 0
+stmt                 : 1
+term                 : 8 11 12
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . BEGIN stmt END
+
+    BEGIN           shift and go to state 1
+
+    program                        shift and go to state 2
+
+state 1
+
+    (1) program -> BEGIN . stmt END
+    (2) stmt -> . INT expr EOL
+    (3) stmt -> . expression EOL
+    (8) expression -> . ID EQUALS term
+
+    INT             shift and go to state 3
+    ID              shift and go to state 6
+
+    stmt                           shift and go to state 5
+    expression                     shift and go to state 4
+
+state 2
+
+    (0) S' -> program .
+
+
+
+state 3
+
+    (2) stmt -> INT . expr EOL
+    (4) expr -> . ID
+    (5) expr -> . ID COMMA expr
+    (6) expr -> . ID EQUALS NUMBER COMMA expr
+    (7) expr -> . ID EQUALS NUMBER
+
+    ID              shift and go to state 8
+
+    expr                           shift and go to state 7
+
+state 4
+
+    (3) stmt -> expression . EOL
+
+    EOL             shift and go to state 9
+
+
+state 5
+
+    (1) program -> BEGIN stmt . END
+
+    END             shift and go to state 10
+
+
+state 6
+
+    (8) expression -> ID . EQUALS term
+
+    EQUALS          shift and go to state 11
+
+
+state 7
+
+    (2) stmt -> INT expr . EOL
+
+    EOL             shift and go to state 12
+
+
+state 8
+
+    (4) expr -> ID .
+    (5) expr -> ID . COMMA expr
+    (6) expr -> ID . EQUALS NUMBER COMMA expr
+    (7) expr -> ID . EQUALS NUMBER
+
+    EOL             reduce using rule 4 (expr -> ID .)
+    COMMA           shift and go to state 14
+    EQUALS          shift and go to state 13
+
+
+state 9
+
+    (3) stmt -> expression EOL .
+
+    END             reduce using rule 3 (stmt -> expression EOL .)
+
+
+state 10
+
+    (1) program -> BEGIN stmt END .
+
+    $end            reduce using rule 1 (program -> BEGIN stmt END .)
+
+
+state 11
+
+    (8) expression -> ID EQUALS . term
+    (9) term -> . NUMBER
+    (10) term -> . ID
+    (11) term -> . NUMBER PLUS term
+    (12) term -> . ID PLUS term
+
+    NUMBER          shift and go to state 15
+    ID              shift and go to state 16
+
+    term                           shift and go to state 17
+
+state 12
+
+    (2) stmt -> INT expr EOL .
+
+    END             reduce using rule 2 (stmt -> INT expr EOL .)
+
+
+state 13
+
+    (6) expr -> ID EQUALS . NUMBER COMMA expr
+    (7) expr -> ID EQUALS . NUMBER
+
+    NUMBER          shift and go to state 18
+
+
+state 14
+
+    (5) expr -> ID COMMA . expr
+    (4) expr -> . ID
+    (5) expr -> . ID COMMA expr
+    (6) expr -> . ID EQUALS NUMBER COMMA expr
+    (7) expr -> . ID EQUALS NUMBER
+
+    ID              shift and go to state 8
+
+    expr                           shift and go to state 19
+
+state 15
+
+    (9) term -> NUMBER .
+    (11) term -> NUMBER . PLUS term
+
+    EOL             reduce using rule 9 (term -> NUMBER .)
+    PLUS            shift and go to state 20
+
+
+state 16
+
+    (10) term -> ID .
+    (12) term -> ID . PLUS term
+
+    EOL             reduce using rule 10 (term -> ID .)
+    PLUS            shift and go to state 21
+
+
+state 17
+
+    (8) expression -> ID EQUALS term .
+
+    EOL             reduce using rule 8 (expression -> ID EQUALS term .)
+
+
+state 18
+
+    (6) expr -> ID EQUALS NUMBER . COMMA expr
+    (7) expr -> ID EQUALS NUMBER .
+
+    COMMA           shift and go to state 22
+    EOL             reduce using rule 7 (expr -> ID EQUALS NUMBER .)
+
+
+state 19
+
+    (5) expr -> ID COMMA expr .
+
+    EOL             reduce using rule 5 (expr -> ID COMMA expr .)
+
+
+state 20
+
+    (11) term -> NUMBER PLUS . term
+    (9) term -> . NUMBER
+    (10) term -> . ID
+    (11) term -> . NUMBER PLUS term
+    (12) term -> . ID PLUS term
+
+    NUMBER          shift and go to state 15
+    ID              shift and go to state 16
+
+    term                           shift and go to state 23
+
+state 21
+
+    (12) term -> ID PLUS . term
+    (9) term -> . NUMBER
+    (10) term -> . ID
+    (11) term -> . NUMBER PLUS term
+    (12) term -> . ID PLUS term
+
+    NUMBER          shift and go to state 15
+    ID              shift and go to state 16
+
+    term                           shift and go to state 24
+
+state 22
+
+    (6) expr -> ID EQUALS NUMBER COMMA . expr
+    (4) expr -> . ID
+    (5) expr -> . ID COMMA expr
+    (6) expr -> . ID EQUALS NUMBER COMMA expr
+    (7) expr -> . ID EQUALS NUMBER
+
+    ID              shift and go to state 8
+
+    expr                           shift and go to state 25
+
+state 23
+
+    (11) term -> NUMBER PLUS term .
+
+    EOL             reduce using rule 11 (term -> NUMBER PLUS term .)
+
+
+state 24
+
+    (12) term -> ID PLUS term .
+
+    EOL             reduce using rule 12 (term -> ID PLUS term .)
+
+
+state 25
+
+    (6) expr -> ID EQUALS NUMBER COMMA expr .
+
+    EOL             reduce using rule 6 (expr -> ID EQUALS NUMBER COMMA expr .)
+

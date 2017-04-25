@@ -2,20 +2,20 @@ import ply.yacc as yacc
 from lexer import tokens
 
 def p_program(p):
-	'''program : 'begin:' stmt 'end' '''
+	'''program : BEGIN stmt END '''
 def p_stmt(p):
-	'''stmt : INT expr ';' 
-			| expression';'
+	'''stmt : INT expr EOL 
+			| expression EOL
 			'''
 def p_expr(p):
 	'''expr : ID
-			| ID ',' expr
-			| ID = NUMBER ',' expr
-			| ID = NUMBER
+			| ID COMMA expr
+			| ID EQUALS NUMBER COMMA expr
+			| ID EQUALS NUMBER
 	'''	
 
 def p_expression(p):
-		'''expression : ID = term
+		'''expression : ID EQUALS term
 		'''
 		
 def p_term(p):
@@ -26,3 +26,5 @@ def p_term(p):
 			| ID PLUS term
 			
 	'''
+	
+yacc.yacc()
